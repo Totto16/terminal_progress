@@ -21,7 +21,13 @@ pub const ProgressState = enum(u8) {
     paused = 4,
 };
 
-pub const ProgressReport = union(ProgressState) { remove, set: u8, @"error": ?u8, indeterminate, paused: ?u8 };
+pub const ProgressReport = union(ProgressState) {
+    remove,
+    set: u8,
+    @"error": ?u8,
+    indeterminate,
+    paused: ?u8,
+};
 
 pub const ProgressWriter = struct {
     writer: std.fs.File.Writer,
@@ -34,7 +40,7 @@ pub const ProgressWriter = struct {
     }
 
     fn sendProgressOSC(self: *ProgressWriter, st: u8, pr: ?u8) !void {
-        if (self.is_tty) {
+        if (!self.is_tty) {
             return;
         }
 
