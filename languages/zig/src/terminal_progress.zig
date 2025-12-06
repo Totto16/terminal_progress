@@ -23,7 +23,7 @@ pub const ProgressState = enum(u8) {
 
 pub const ProgressReport = union(ProgressState) { remove, set: u8, @"error": ?u8, indeterminate, paused: ?u8 };
 
-const ProgressWriter = struct {
+pub const ProgressWriter = struct {
     writer: std.fs.File.Writer,
 
     pub fn create(buffer: []u8) ProgressWriter {
