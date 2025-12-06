@@ -20,7 +20,7 @@ pub fn build(b: *std.Build) !void {
         .optimize = optimize,
     });
 
-    if (builtin.os.tag == .linux) {
+    if (comptime builtin.os.tag != .windows) {
         const main_tests = b.addTest(.{ .root_module = b.addModule("terminal_progress_tests", .{
             .root_source_file = b.path("src/tests.zig"),
             .target = target,
@@ -28,7 +28,6 @@ pub fn build(b: *std.Build) !void {
         }) });
 
         main_tests.root_module.addImport("terminal_progress", module);
-        main_tests.linkLibC();
 
         const run_main_tests = b.addRunArtifact(main_tests);
 

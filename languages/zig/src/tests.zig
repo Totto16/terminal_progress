@@ -17,8 +17,8 @@ const Pipe = struct {
 };
 
 test "ProgressWriter - no tty" {
-    if (builtin.os.tag != .linux) {
-        @compileError("Only work on linux");
+    if (comptime builtin.os.tag == .windows) {
+        @compileError("Not supported on windows");
     }
 
     {
@@ -58,8 +58,8 @@ test "ProgressWriter - no tty" {
 // const progress_pulsing_error = "\x1b]9;4;2\x07";
 
 test "writer - remove" {
-    if (builtin.os.tag != .linux) {
-        @compileError("Only work on linux");
+    if (comptime builtin.os.tag == .windows) {
+        @compileError("Not supported on windows");
     }
 
     {
@@ -93,8 +93,8 @@ test "writer - remove" {
 }
 
 test "writer - set" {
-    if (builtin.os.tag != .linux) {
-        @compileError("Only work on linux");
+    if (comptime builtin.os.tag == .windows) {
+        @compileError("Not supported on windows");
     }
 
     {
@@ -128,8 +128,8 @@ test "writer - set" {
 }
 
 test "writer - error - nothing" {
-    if (builtin.os.tag != .linux) {
-        @compileError("Only work on linux");
+    if (comptime builtin.os.tag == .windows) {
+        @compileError("Not supported on windows");
     }
 
     {
@@ -163,8 +163,8 @@ test "writer - error - nothing" {
 }
 
 test "writer - error - percentage" {
-    if (builtin.os.tag != .linux) {
-        @compileError("Only work on linux");
+    if (comptime builtin.os.tag == .windows) {
+        @compileError("Not supported on windows");
     }
 
     {
@@ -198,8 +198,8 @@ test "writer - error - percentage" {
 }
 
 test "writer - indeterminate" {
-    if (builtin.os.tag != .linux) {
-        @compileError("Only work on linux");
+    if (comptime builtin.os.tag == .windows) {
+        @compileError("Not supported on windows");
     }
 
     {
@@ -233,8 +233,8 @@ test "writer - indeterminate" {
 }
 
 test "writer - paused - nothing" {
-    if (builtin.os.tag != .linux) {
-        @compileError("Only work on linux");
+    if (comptime builtin.os.tag == .windows) {
+        @compileError("Not supported on windows");
     }
 
     {
@@ -268,8 +268,8 @@ test "writer - paused - nothing" {
 }
 
 test "writer - paused - percentage" {
-    if (builtin.os.tag != .linux) {
-        @compileError("Only work on linux");
+    if (comptime builtin.os.tag == .windows) {
+        @compileError("Not supported on windows");
     }
 
     {
