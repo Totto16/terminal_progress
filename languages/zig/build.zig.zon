@@ -3,6 +3,11 @@
     .minimum_zig_version = "0.15.0",
     .version = "0.0.2",
     .dependencies = .{},
-    .paths = .{ "build.zig.zon", "build.zig", "src/terminal_progress.zig" },
+    .paths = .{
+        "build.zig.zon",
+        "build.zig",
+        "src",
+        "README.md",
+    },
     .fingerprint = 0xf0fabdf1132fae96,
 }

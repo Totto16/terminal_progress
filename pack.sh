@@ -4,9 +4,17 @@ set -e
 
 function pack_zig() {
     NAME="$1"
-    OUT_DIR="$2"
+    OUT_DIR="$(realpath "$2")"
+
     LANG="zig"
-    tar --exclude "./.zig-cache" --exclude "./zig-out" -czvf "$OUT_DIR/$NAME-$LANG.tar.gz" -C "./languages/$LANG" .
+    VERSION="0.0.2"
+
+    pushd . >/dev/null
+    cd "./languages/$LANG"
+
+    tar --exclude "./.zig-cache" --exclude "./zig-out" -czvf "$OUT_DIR/$NAME-$LANG-v$VERSION.tar.gz" --transform "s,^\.,$NAME-v$VERSION," .
+
+    popd >/dev/null
 }
 
 function pack() {
