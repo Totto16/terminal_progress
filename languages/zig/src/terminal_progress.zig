@@ -25,15 +25,16 @@ pub const ProgressReport = union(ProgressState) { remove, set: u8, @"error": ?u8
 
 pub const ProgressWriter = struct {
     writer: std.fs.File.Writer,
+    is_tty: bool,
 
     pub fn create(buffer: []u8) ProgressWriter {
         const writer = std.fs.File.stdout().writer(buffer);
 
-        return .{ .writer = writer };
+        return .{ .writer = writer, .is_tty = writer.file.isTty() };
     }
 
     fn sendProgressOSC(self: *ProgressWriter, st: u8, pr: ?u8) !void {
-        if (!self.writer.file.isTty()) {
+        if (self.is_tty) {
             return;
         }
 

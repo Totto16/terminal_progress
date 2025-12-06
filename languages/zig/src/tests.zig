@@ -17,7 +17,9 @@ const Pipe = struct {
 };
 
 fn setNonBlockFile(file: std.fs.File) !void {
-    const result = try std.posix.fcntl(file.handle, std.os.linux.F.SETFL, std.os.linux.IN.NONBLOCK);
+    const flags = try std.posix.fcntl(file.handle, std.os.linux.F.GETFL, 0);
+
+    const result = try std.posix.fcntl(file.handle, std.os.linux.F.SETFL, flags | std.os.linux.IN.NONBLOCK);
     if (result != 0) {
         const errno = std.c._errno();
         std.debug.panic("fcntl returned errno: {d}\n", .{errno.*});
@@ -25,22 +27,22 @@ fn setNonBlockFile(file: std.fs.File) !void {
     }
 }
 
-const CInterop = @cImport({
-    @cInclude("asm/termbits.h");
-    @cInclude("asm/termios.h");
-});
+fn readAvailFromNonBlock(fd: std.posix.fd_t, buf: []u8) ![]u8 {
+    const n: usize = blk: {
+        const n = std.posix.read(fd, buf) catch |err| {
+            switch (err) {
+                // No data available right now
+                error.WouldBlock => {
+                    break :blk 0;
+                },
+                else => return err,
+            }
+        };
+        break :blk n;
+    };
 
-fn setTTyFile(file: std.fs.File) !void {
-    const winsize: CInterop.winsize = .{ .ws_row = 1, .ws_col = 1, .ws_xpixel = 1, .ws_ypixel = 1 };
-
-    const result = std.os.linux.ioctl(file.handle, CInterop.TIOCSWINSZ, @intFromPtr(&winsize));
-    if (result != 0) {
-        const errno = std.c._errno();
-        std.debug.panic("ioctl returned errno: {d}\n", .{errno.*});
-        return error.Errno;
-    }
+    return buf[0..n];
 }
-
 test "ProgressWriter - no tty" {
     if (builtin.os.tag != .linux) {
         @compileError("Only work on linux");
@@ -62,22 +64,12 @@ test "ProgressWriter - no tty" {
 
         const file_writer = file.writer(&pipe_buffer);
         {
-            var writer = terminal_progress.ProgressWriter{ .writer = file_writer };
+            var writer = terminal_progress.ProgressWriter{ .writer = file_writer, .is_tty = false };
             try writer.setProgress(terminal_progress.ProgressState.indeterminate);
         }
 
         var buf: [1024]u8 = undefined;
-        const n = blk: {
-            const n = read_file.readAll(&buf) catch |err| {
-                if (err == error.WouldBlock) {
-                    break :blk 0;
-                }
-                return err;
-            };
-            break :blk n;
-        };
-
-        const written = buf[0..n];
+        const written = try readAvailFromNonBlock(pipe.read, &buf);
 
         try std.testing.expectEqualStrings(
             "",
@@ -85,6 +77,13 @@ test "ProgressWriter - no tty" {
         );
     }
 }
+
+// const progress_remove = "\x1b]9;4;0\x07";
+// const @"progress_normal {d}" = "\x1b]9;4;1;{d}\x07";
+// const @"progress_error {d}" = "\x1b]9;4;2;{d}\x07";
+// const progress_pulsing_error = "\x1b]9;4;2\x07";
+// const progress_normal_100 = "\x1b]9;4;1;100\x07";
+// const progress_error_100 = "\x1b]9;4;2;100\x07";
 
 test "writer - indeterminate" {
     if (builtin.os.tag != .linux) {
@@ -99,26 +98,22 @@ test "writer - indeterminate" {
         const read_file = std.fs.File{ .handle = pipe.read };
         try setNonBlockFile(read_file);
         const file = std.fs.File{ .handle = pipe.write };
-        try setTTyFile(read_file);
-
-        // otherwise nothing is printed
-        try std.testing.expect(file.isTty());
 
         var pipe_buffer: [terminal_progress.buffer_length]u8 = undefined;
 
         const file_writer = file.writer(&pipe_buffer);
         {
-            var writer = terminal_progress.ProgressWriter{ .writer = file_writer };
+            var writer = terminal_progress.ProgressWriter{ .writer = file_writer, .is_tty = true };
             try writer.setProgress(terminal_progress.ProgressState.indeterminate);
         }
 
         var buf: [1024]u8 = undefined;
-        const n = try read_file.readAll(&buf);
+        const written = try readAvailFromNonBlock(pipe.read, &buf);
 
-        const written = buf[0..n];
+        std.debug.print("here: '{any}'\n", .{written});
 
         try std.testing.expectEqualStrings(
-            "",
+            "\x1b]9;4;3\x07",
             written,
         );
     }
