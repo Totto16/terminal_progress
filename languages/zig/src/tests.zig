@@ -54,9 +54,6 @@ test "ProgressWriter - no tty" {
     }
 }
 
-// const @"progress_error {d}" = "\x1b]9;4;2;{d}\x07";
-// const progress_pulsing_error = "\x1b]9;4;2\x07";
-
 test "writer - remove" {
     if (comptime builtin.os.tag == .windows) {
         @compileError("Not supported on windows");
