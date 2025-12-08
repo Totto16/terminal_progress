@@ -100,7 +100,7 @@ pkg = import('pkgconfig')
 
 pkg.generate(
     terminal_progress_lib,
-    description: 'An terminal progress reported library for the OSC command',
+    description: 'A terminal progress reported library for the OSC command',
     name: 'terminal_progress',
     filebase: 'terminal_progress',
     subdirs: [terminal_progress_lib_header_install_dir],
