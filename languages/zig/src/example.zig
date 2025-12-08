@@ -17,6 +17,9 @@ pub fn main() !void {
         const steps = 50;
         std.debug.print("Indeterminate progress bar for 2 seconds\n", .{});
 
+        // set the normal progress, o that color is used
+        try writer.setProgress(.{ .set = 10 });
+
         for (0..steps + 1) |_| {
             try writer.setProgress(.indeterminate);
 
