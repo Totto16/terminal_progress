@@ -33,13 +33,15 @@ function pack_c() {
 
     mkdir -p "$TEMP"
 
-    meson setup "$BUILD_DIR" -Dbuildtype=release -Ddefault_library=both -Dprefix="$PREFIX"
+    meson setup "$BUILD_DIR" -Dbuildtype=release -Ddefault_library=both -Dprefix="/usr"
     meson compile -C "$BUILD_DIR"
-    meson install -C "$BUILD_DIR"
+    meson install -C "$BUILD_DIR" --destdir="$PREFIX"
 
     cd "$PREFIX"
 
     tar -czvf "$OUT_DIR/$NAME-$LANG-v$VERSION.tar.gz" --transform "s,^\.,$NAME-v$VERSION," .
+
+    rm -rf "$TEMP"
 
     popd >/dev/null
 }
