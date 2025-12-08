@@ -39,7 +39,7 @@ function pack_c() {
 
     cd "$PREFIX"
 
-    tar -czvf "$OUT_DIR/$NAME-$LANG-v$VERSION.tar.gz" --transform "s,^\.,$NAME-v$VERSION," .
+    tar -czvf "$OUT_DIR/$NAME-$LANG-v$VERSION.tar.gz" .
 
     rm -rf "$TEMP"
 
