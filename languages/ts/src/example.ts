@@ -95,3 +95,5 @@ async function main(): Promise<void> {
 
 	send_progress({ type: ProgressState.ProgressStateRemove })
 }
+
+void main()
