@@ -1,0 +1,14 @@
+{
+  "name": "terminal_progress",
+  "version": "0.0.1",
+  "description": "This implements the OSC Terminal escapes for progress bars",
+  "license": "MIT",
+  "author": "Totto16",
+  "scripts": {
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "@types/node": "^25.0.1",
+    "typescript": "^5.9.3"
+  }
+}
