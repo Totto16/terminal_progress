@@ -9,8 +9,8 @@ Why? Becasue Ghostty also supports those, and I use ghostty.
 
 langauges:
 - [x] zig
-- [ ] js/ts
-- [ ] c
-- [ ] c++
+- [x] js/ts
+- [x] c
+- [x] c++
 - [ ] python
 - [ ] haskell
