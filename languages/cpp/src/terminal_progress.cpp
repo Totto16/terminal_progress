@@ -17,11 +17,11 @@ static void send_progress_impl(std::ostream &os, uint8_t st,
                                std::optional<uint8_t> pr) {
 
   if (pr.has_value()) {
-    os << ANSI_OSC OSC_PROGRESS_REPORT_BASE << ";" << st << ";" << pr.value()
-    << ANSI_BELL;
-    
+    os << ANSI_OSC OSC_PROGRESS_REPORT_BASE << ";" << std::to_string(st) << ";" << std::to_string(pr.value())
+       << ANSI_BELL;
+
   } else {
-    os << ANSI_OSC OSC_PROGRESS_REPORT_BASE << ";" << st << ANSI_BELL;
+    os << ANSI_OSC OSC_PROGRESS_REPORT_BASE << ";" << std::to_string(st) << ANSI_BELL;
   }
 
   std::flush(os);
