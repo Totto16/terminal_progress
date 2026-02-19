@@ -17,6 +17,25 @@ function pack_zig() {
     popd >/dev/null
 }
 
+function pack_js() {
+    NAME="$1"
+    OUT_DIR="$(realpath "$2")"
+
+    LANG="ts"
+    VERSION="0.0.1"
+
+    pushd . >/dev/null
+    cd "./languages/$LANG"
+
+    npm run build
+
+    npm pack --pack-destination "$OUT_DIR"
+
+    mv "$OUT_DIR/$NAME-$VERSION.tgz" "$OUT_DIR/$NAME-$LANG-v$VERSION.tgz"
+
+    popd >/dev/null
+}
+
 function pack_c() {
     NAME="$1"
     OUT_DIR="$(realpath "$2")"
@@ -54,6 +73,7 @@ function pack() {
 
     pack_zig "$PACKAGE_NAME" "$OUT_DIR"
     pack_c "$PACKAGE_NAME" "$OUT_DIR"
+    pack_js "$PACKAGE_NAME" "$OUT_DIR"
 }
 
 pack
