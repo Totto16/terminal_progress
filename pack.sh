@@ -31,7 +31,7 @@ function pack_js() {
 
     npm pack --pack-destination "$OUT_DIR"
 
-    mv "$OUT_DIR/$NAME-$VERSION.tgz" "$OUT_DIR/$NAME-$LANG-v$VERSION.tgz"
+    mv "$OUT_DIR/osc_terminal_progress-$VERSION.tgz" "$OUT_DIR/$NAME-$LANG-v$VERSION.tgz"
 
     popd >/dev/null
 }
