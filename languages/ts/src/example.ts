@@ -12,7 +12,7 @@ async function main(): Promise<void> {
 	{
 		const steps: number = 50
 		console.error("Indeterminate progress bar for 2 seconds\n")
-		// set the normal progress, o that color is used
+		// set the normal progress, so that color is used
 		send_progress({ type: ProgressState.ProgressStateSet, value: 10 })
 
 		for (let i = 0; i <= steps; ++i) {

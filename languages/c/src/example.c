@@ -16,7 +16,7 @@ int main(void) {
   {
     const size_t steps = 50;
     fprintf(stderr, "Indeterminate progress bar for 2 seconds\n");
-    // set the normal progress, o that color is used
+    // set the normal progress, so that color is used
     send_progress(
         (ProgressReport){.type = ProgressStateSet, .data = {.set = 10}});
 

@@ -16,7 +16,7 @@ int main() {
   {
     const size_t steps = 50;
     std::cerr << "Indeterminate progress bar for 2 seconds\n";
-    // set the normal progress, o that color is used
+    // set the normal progress, so that color is used
     ProgressReport::set(10).send();
 
     for (size_t i = 0; i <= steps; ++i) {
