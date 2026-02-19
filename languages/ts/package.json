@@ -1,6 +1,6 @@
 {
   "name": "osc_terminal_progress",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "This implements the OSC Terminal escapes for progress bars",
   "license": "MIT",
   "author": "Totto16",

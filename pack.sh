@@ -22,7 +22,7 @@ function pack_js() {
     OUT_DIR="$(realpath "$2")"
 
     LANG="ts"
-    VERSION="0.0.1"
+    VERSION="0.0.2"
 
     pushd . >/dev/null
     cd "./languages/$LANG"
