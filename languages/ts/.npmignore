@@ -1,0 +1,7 @@
+node_modules/
+.gitignore
+package-lock.json
+*.tgz
+build/example.js
+build/example.d.ts
+src/

@@ -10,5 +10,25 @@
   "devDependencies": {
     "@types/node": "^25.0.1",
     "typescript": "^5.9.3"
-  }
+  },
+  "exports": {
+    ".": {
+      "require": {
+        "types": "./build/terminal_progress.d.ts",
+        "default": "./build/terminal_progress.js"
+      },
+      "import": {
+        "types": "./build/terminal_progress.d.ts",
+        "default": "./build/terminal_progress.js"
+      },
+      "default": "./build/terminal_progress.js"
+    }
+  },
+  "type": "commonjs",
+  "main": "./build/terminal_progress.js",
+  "types": "./build/terminal_progress.d.ts",
+  "files": [
+    "build/terminal_progress.js",
+    "build/terminal_progress.d.ts"
+  ]
 }
