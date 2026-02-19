@@ -25,7 +25,7 @@ async function main(): Promise<void> {
 	send_progress({ type: ProgressState.ProgressStateRemove })
 
 	{
-		console.error("Progress bar from 0%% to 100%% in 5 seconds\n")
+		console.error("Progress bar from 0% to 100% in 5 seconds\n")
 
 		for (let i = 0; i <= percentage; ++i) {
 			send_progress({ type: ProgressState.ProgressStateSet, value: i })
@@ -53,7 +53,7 @@ async function main(): Promise<void> {
 	send_progress({ type: ProgressState.ProgressStateRemove })
 
 	{
-		console.error("Progress bar error from 0%% to 100%% in 5 seconds\n")
+		console.error("Progress bar error from 0% to 100% in 5 seconds\n")
 
 		for (let i = 0; i <= percentage; ++i) {
 			send_progress({ type: ProgressState.ProgressStateError, value: i })
@@ -81,7 +81,7 @@ async function main(): Promise<void> {
 	send_progress({ type: ProgressState.ProgressStateRemove })
 
 	{
-		console.error("Progress bar paused from 0%% to 100%% in 5 seconds\n")
+		console.error("Progress bar paused from 0% to 100% in 5 seconds\n")
 
 		for (let i = 0; i <= percentage; ++i) {
 			send_progress({
