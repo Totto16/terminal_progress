@@ -7,7 +7,7 @@ function pack_zig() {
     OUT_DIR="$(realpath "$2")"
 
     LANG="zig"
-    VERSION="0.0.2"
+    VERSION="0.0.3"
 
     pushd . >/dev/null
     cd "./languages/$LANG"
