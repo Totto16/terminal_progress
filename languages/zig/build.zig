@@ -2,13 +2,18 @@ const std = @import("std");
 const builtin = @import("builtin");
 const CompileStep = std.Build.Step.Compile;
 
-const required_zig_version = std.SemanticVersion.parse("0.15.0") catch unreachable;
+const required_zig_version = std.SemanticVersion.parse("0.16.0") catch unreachable;
 
 // taken and modified from: https://github.com/SpexGuy/Zig-AoC-Template/
 pub fn build(b: *std.Build) !void {
     if (comptime builtin.zig_version.order(required_zig_version) == .lt) {
         std.debug.print("Warning: Your version of Zig too old. You will need to download a newer build\n", .{});
-        std.os.exit(1);
+        std.process.exit(1);
+    }
+
+    if (comptime builtin.zig_version.order(required_zig_version) == .gt) {
+        std.debug.print("Warning: Your version of Zig too new. You will need to migrate this package to version {} from {}\n", .{ builtin.zig_version, required_zig_version });
+        std.process.exit(1);
     }
 
     const target = b.standardTargetOptions(.{});

@@ -1,15 +1,23 @@
 const terminal_progress = @import("terminal_progress.zig");
 const std = @import("std");
 
-fn seconds_to_us(seconds: f64) u64 {
-    return @intFromFloat(seconds * 1_000_000_000);
+fn seconds_to_ns(seconds: f64) std.Io.Duration {
+    return std.Io.Duration.fromNanoseconds(@intFromFloat(seconds * 1_000_000_000));
 }
 
-pub fn main() !void {
+fn sleepOld(io: std.Io, amount: std.Io.Duration) void {
+    const clock = std.Io.Clock.real;
+
+    io.sleep(amount, clock) catch @panic("cancelled sleep");
+}
+
+pub fn main(init: std.process.Init) !void {
     const percentage = 100;
 
+    const io = init.io;
+
     var buffer: [terminal_progress.buffer_length]u8 = undefined;
-    var writer = terminal_progress.ProgressWriter.create(&buffer);
+    var writer = terminal_progress.ProgressWriter.create(io, &buffer);
 
     try writer.setProgress(.remove);
 
@@ -23,7 +31,7 @@ pub fn main() !void {
         for (0..steps + 1) |_| {
             try writer.setProgress(.indeterminate);
 
-            std.Thread.sleep(seconds_to_us(2.0 / @as(f64, @floatFromInt(steps))));
+            sleepOld(io, seconds_to_ns(2.0 / @as(f64, @floatFromInt(steps))));
         }
     }
 
@@ -34,7 +42,7 @@ pub fn main() !void {
 
         for (0..percentage + 1) |i| {
             try writer.setProgress(.{ .set = @intCast(i) });
-            std.Thread.sleep(seconds_to_us(5.0 / @as(f64, @floatFromInt(percentage))));
+            sleepOld(io, seconds_to_ns(5.0 / @as(f64, @floatFromInt(percentage))));
         }
     }
 
@@ -47,7 +55,7 @@ pub fn main() !void {
         for (0..steps + 1) |_| {
             try writer.setProgress(.{ .@"error" = null });
 
-            std.Thread.sleep(seconds_to_us(2.0 / @as(f64, @floatFromInt(steps))));
+            sleepOld(io, seconds_to_ns(2.0 / @as(f64, @floatFromInt(steps))));
         }
     }
 
@@ -58,7 +66,7 @@ pub fn main() !void {
 
         for (0..percentage + 1) |i| {
             try writer.setProgress(.{ .@"error" = @intCast(i) });
-            std.Thread.sleep(seconds_to_us(5.0 / @as(f64, @floatFromInt(percentage))));
+            sleepOld(io, seconds_to_ns(5.0 / @as(f64, @floatFromInt(percentage))));
         }
     }
 
@@ -71,7 +79,7 @@ pub fn main() !void {
         for (0..steps + 1) |_| {
             try writer.setProgress(.{ .paused = null });
 
-            std.Thread.sleep(seconds_to_us(2.0 / @as(f64, @floatFromInt(steps))));
+            sleepOld(io, seconds_to_ns(2.0 / @as(f64, @floatFromInt(steps))));
         }
     }
 
@@ -82,7 +90,7 @@ pub fn main() !void {
 
         for (0..percentage + 1) |i| {
             try writer.setProgress(.{ .paused = @intCast(i) });
-            std.Thread.sleep(seconds_to_us(5.0 / @as(f64, @floatFromInt(percentage))));
+            sleepOld(io, seconds_to_ns(5.0 / @as(f64, @floatFromInt(percentage))));
         }
     }
 

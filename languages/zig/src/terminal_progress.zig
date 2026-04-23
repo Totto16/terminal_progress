@@ -30,13 +30,13 @@ pub const ProgressReport = union(ProgressState) {
 };
 
 pub const ProgressWriter = struct {
-    writer: std.fs.File.Writer,
+    writer: std.Io.File.Writer,
     is_tty: bool,
 
-    pub fn create(buffer: []u8) ProgressWriter {
-        const writer = std.fs.File.stdout().writer(buffer);
+    pub fn create(io: std.Io, buffer: []u8) ProgressWriter {
+        const writer = std.Io.File.stdout().writer(io, buffer);
 
-        return .{ .writer = writer, .is_tty = writer.file.isTty() };
+        return .{ .writer = writer, .is_tty = writer.file.isTty(io) catch @panic("isTty failed with an IO error") };
     }
 
     fn sendProgressOSC(self: *ProgressWriter, st: u8, pr: ?u8) !void {
@@ -76,8 +76,8 @@ pub const ProgressManager = struct {
     processed_items: u32,
     writer: ProgressWriter,
 
-    pub fn init(buffer: []u8, total_items: ?u32) ProgressManager {
-        const writer = ProgressWriter.create(buffer);
+    pub fn init(io: std.Io, buffer: []u8, total_items: ?u32) ProgressManager {
+        const writer = ProgressWriter.create(io, buffer);
         if (total_items == 0) {
             return ProgressManager{ .total_items = null, .processed_items = 0, .writer = writer };
         }
